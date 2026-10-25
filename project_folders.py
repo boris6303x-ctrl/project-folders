@@ -121,18 +121,28 @@ def saverecord():
 def delete_structure():
     prompt = input("Are you sure you want to delete all files and directories? (y/n)")
 
-    if prompt == "no" or prompt == "n":
-        return
-    if not os.path.exists(ROOT):
-        print("Nothing to delete. Please create structure.")
-        return
-    for root, dirs, files in os.walk(ROOT, topdown=False):
-        for file in files:
-            os.remove(os.path.join(root, file))
-        for dir in dirs:
-            os.rmdir(os.path.join(root, dir))
-    
-    os.rmdir(ROOT)
+    if not yes_no_validation(prompt):
+        print("Error 004: input is invalid")
+    else:
+        if prompt == "no" or prompt == "n":
+            return
+        if not os.path.exists(ROOT):
+            print("Nothing to delete. Please create structure.")
+            return
+        for root, dirs, files in os.walk(ROOT, topdown=False):
+            for file in files:
+                os.remove(os.path.join(root, file))
+            for dir in dirs:
+                os.rmdir(os.path.join(root, dir))
+        
+        os.rmdir(ROOT)
+
+def yes_no_validation(prompt):
+    valid_prompts = ["y", "n", "yes", "no"]
+
+    if prompt not in valid_prompts:
+        return False
+    return True
 
 if __name__ == "__main__":
     main()
